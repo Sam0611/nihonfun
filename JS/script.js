@@ -1,46 +1,4 @@
 
-// send exit message to server and return to index.html
-function exit_test()
-{
-    sock.send(JSON.stringify({
-        type: "test_exit"
-    }))
-    changeContent("index.html");
-    document.getElementById('gameID').style.display = "none";
-    document.getElementById('playersListContainer').style.display = "none";
-}
-
-function join_game()
-{
-    let id = document.getElementById('toJoinId').value;
-    document.getElementById('gameID').textContent = "ID : " + id;
-    sock.send(JSON.stringify({
-        type: "join_game",
-        data: id
-    }))
-}
-
-function start_game()
-{
-    sock.send(JSON.stringify({
-        type: "start_game"
-    }))
-}
-
-function validate_answer()
-{
-    let answer = document.getElementById('answer').value;
-    if (answer == "")
-        return ;
-
-    sock.send(JSON.stringify({
-        type: "check_answer",
-        data: answer.toLowerCase()
-    }))
-    document.getElementById('answer').value = "";
-    document.getElementById('answerContainer').style.display = "none";
-}
-
 sock.onmessage = function(event) {
 
     let json = JSON.parse(event.data);
