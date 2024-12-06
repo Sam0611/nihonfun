@@ -11,10 +11,12 @@ function initGame(event)
 // send game settings to server and load create_profile.html
 function confirmSettings()
 {
+    let nquestion = document.getElementById('nquestion').value;
     let timer = document.getElementById('timer').value;
     let level = document.getElementById('level').value; // 1 - 5
     sock.send(JSON.stringify({
         type: "test_settings",
+        nquestion : nquestion,
         timer: timer,
         level: level
     }))

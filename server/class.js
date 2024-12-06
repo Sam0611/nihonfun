@@ -8,12 +8,17 @@ class Game
     {
         this.id = id;
         this.name = name;
+        this.questionNumbers = 0;
         this.level = "0";
         this.timer = 0;
         this.players = [];
         this.sockets = [];
+        this.disconnectedPlayers = [];
+        this.disconnectedSockets = [];
         this.creator = null;
         this.index = 0;
+        this.running = false;
+        this.comingPlayers = 1;
 
         if (name == "hiraganas")
             this.data = shuffleArray(hiraganas);

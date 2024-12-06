@@ -36,3 +36,17 @@ function change_picture(x)
     photo = img[i];
     document.getElementById('picture').src = "img_profil/" + photo;
 }
+
+function update_players_list(players)
+{
+    let ul = document.getElementById('playersList');
+    ul.innerHTML = "";
+
+    let li;
+    for (let i = 0; i < players.length; i++)
+    {
+        li = document.createElement('li');
+        li.innerHTML = "<img src=" + players[i].picture + ">" + players[i].name;
+        ul.appendChild(li);
+    }
+}

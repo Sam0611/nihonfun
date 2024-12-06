@@ -39,10 +39,17 @@ function send_data_to_players(game, type, data)
     }
 }
 
+// if game is running, put user and socket in disconnected array
 // delete user in game players list
 // delete socket in game sockets list
-function delete_player(game, user, sock)
+function disconnect_player(game, user, sock)
 {
+    if (game.running)
+    {
+        game.disconnectedPlayers.push(user);
+        game.disconnectedSockets.push(sock);
+    }
+
     let i = game.players.indexOf(user);
     if (i != -1)
         game.players.splice(i, 1);
@@ -65,5 +72,5 @@ function delete_game(game, games)
 module.exports.shuffleArray = shuffleArray;
 module.exports.generateID = generateID;
 module.exports.send_data_to_players = send_data_to_players;
-module.exports.delete_player = delete_player;
+module.exports.disconnect_player = disconnect_player;
 module.exports.delete_game = delete_game;

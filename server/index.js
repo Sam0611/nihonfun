@@ -7,17 +7,66 @@ const Player = classes.playerClass;
 
 const utils = require('./utils.js');
 const send_data_to_players = utils.send_data_to_players;
-const delete_player = utils.delete_player;
+const disconnect_player = utils.disconnect_player;
 const delete_game = utils.delete_game;
 
 let games = [];
 
+// if all players are ready, send next question or the end of game
+function continue_game(game)
+{
+    for (let i = 0; i < game.players.length; i++)
+        if (game.players[i].ready == false)
+            return ;
+
+    game.index++;
+    
+    if (game.index < game.questionNumbers)
+    {
+        setTimeout(send_next_question, 3000, game);
+    }
+    else
+    {
+        setTimeout(send_data_to_players, 3000, game, "end_game", game.players);
+        game.running = false;
+    }
+}
+
+// send to all players data containing the question content, question index and number of question
+// set players not ready
 function send_next_question(game)
 {
-    data = [game.data[game.index][0], game.index + 1, game.data.length];
+    data = [game.data[game.index][0], game.index + 1, game.questionNumbers];
     send_data_to_players(game, "new_question", data);
     for (let i = 0; i < game.players.length; i++)
         game.players[i].ready = false;
+}
+
+// player and his socket become disconnected
+// if there is no player left, delete game
+// update players list
+// if is creator, it becomes another player
+// continue game if all remaining players are ready
+function exit_game(game, user, ws, isCreator)
+{
+    disconnect_player(game, user, ws);
+
+    if (game.players.length == 0)
+    {
+        delete_game(game, games);
+        return ;
+    }
+
+    send_data_to_players(game, "update_players_list", game.players);
+
+    if (isCreator)
+    {
+        game.sockets[0].send(JSON.stringify({
+            type: "new_game_creator"
+        }))
+    }
+
+    continue_game(game);
 }
 
 s.on('connection', (ws) => {
@@ -53,6 +102,7 @@ s.on('connection', (ws) => {
         // add game settings
         if (message.type === "test_settings")
         {
+            game.questionNumbers = message.nquestion > game.data.length ? game.data.length : message.nquestion;
             game.level = message.level;
             game.timer = message.timer;
             games.push(game);
@@ -90,50 +140,56 @@ s.on('connection', (ws) => {
                 game.creator = user;
             game.players.push(user);
             game.sockets.push(ws);
-            // users.push(user);
+            game.comingPlayers--;
 
             // send player list to all players
             send_data_to_players(game, "players_list", game.players);
         }
 
         
-        /*  *   *   *   *   EXIT GAME   *   *   *   *   */
-
-        
-        // delete game from games list
-        if (message.type === "test_exit")
-        {
-            delete_player(game, user, ws);
-            send_data_to_players(game, "players_list", game.players);
-            if (isCreator)
-            {
-                game.creator = null;
-                delete_game(game, games);
-            }
-            isCreator = false;
-        }
-
-        
         /*  *   *   *   *   JOIN GAME   *   *   *   *   */
 
         
-        // join game
+        // check if ID is valid
+        // if game not running, join
+        // if game running, access not granted
         if (message.type === "join_game")
         {
+            // check ID
             const id = message.data;
             for (let i = 0; i < games.length; i++)
             {
                 if (id == games[i].id)
                 {
                     game = games[i];
-                    ws.send(JSON.stringify({
-                        type: "correct_game_id"
-                    }))
                     break ;
                 }
             }
+
+            // id not valid, send error
+            if (!game)
+            {
+                ws.send(JSON.stringify({
+                    type: "wrong_game_id"
+                }))
+                return ;
+            }
+            
+            // game hasn't started, join accepted
+            if (!game.running)
+            {
+                ws.send(JSON.stringify({
+                    type: "correct_game_id"
+                }))
+                game.comingPlayers++;
+                return ;
+            }
+
+            // game is running
+            // access not granted, send error
+            game = null;
             ws.send(JSON.stringify({
-                type: "wrong_game_id"
+                type: "cannot_join_running_game"
             }))
         }
 
@@ -147,6 +203,7 @@ s.on('connection', (ws) => {
             ws.send(JSON.stringify({
                 type: "game_settings",
                 name: game.name,
+                nquestion: game.questionNumbers,
                 level: game.level,
                 timer: game.timer,
                 isCreator: isCreator
@@ -160,6 +217,16 @@ s.on('connection', (ws) => {
         // send question data to players
         if (message.type === "start_game")
         {
+            // cannot start while players are chosing profile
+            if (game.comingPlayers)
+            {
+                ws.send(JSON.stringify({
+                    type: "waiting_for_players"
+                }))
+                return ;
+            }
+
+            game.running = true;
             send_next_question(game);
         }
 
@@ -177,16 +244,25 @@ s.on('connection', (ws) => {
             else
                 user.points--;
 
-            for (let i = 0; i < game.players.length; i++)
-                if (game.players[i].ready == false)
-                    return ;
+            // if all players ready, send next question
+            continue_game(game);
+        }
 
-            game.index++;
-            
-            if (game.index < game.data.length)
-                setTimeout(send_next_question, 3000, game);
-            else
-                setTimeout(send_data_to_players, 3000, game, "end_game", game.players);
+
+        /*  *   *   *   *   EXIT GAME   *   *   *   *   */
+
+
+        if (message.type === "test_exit")
+        {
+            exit_game(game, user, ws, isCreator);
+            isCreator = false;
+            game = null;
+        }
+
+        if (message.type === "new_game_creator")
+        {
+            isCreator = true;
+            game.creator = user;
         }
         
     });
@@ -196,14 +272,9 @@ s.on('connection', (ws) => {
         if (!game)
             return ;
 
-        delete_player(game, user, ws);
-
-        send_data_to_players(game, "players_list", game.players);
-
-        if (isCreator)
-            delete_game(game, games);
+        exit_game(game, user, ws, isCreator);
         isCreator = false;
-
+        game = null;
     });
     
 });

@@ -20,18 +20,13 @@ sock.onmessage = function(event) {
         });
 
         document.getElementById('playersListContainer').style.display = "block";
+        update_players_list(json.data);
+    }
 
-        let players = json.data;
-        let ul = document.getElementById('playersList');
-        ul.innerHTML = "";
-
-        let li;
-        for (let i = 0; i < players.length; i++)
-        {
-            li = document.createElement('li');
-            li.innerHTML = "<img src=" + players[i].picture + ">" + players[i].name;
-            ul.appendChild(li);
-        }
+    // update game players list
+    if (json.type === "update_players_list")
+    {
+        update_players_list(json.data);
     }
     
     // display game settings
@@ -40,9 +35,15 @@ sock.onmessage = function(event) {
         let settings = document.getElementById('game_settings');
         if (!settings)
             return ;
-        settings.textContent = json.name + " Level " + json.level + ", time : " + json.timer;
+        settings.textContent = json.name + " Level " + json.level + ", time : " + json.timer + ", question : " + json.nquestion;
         if (!json.isCreator)
             document.getElementById('start_game').style.display = "none";
+    }
+
+    // display waiting for players message
+    if (json.type === "waiting_for_players")
+    {
+        document.getElementById('error').textContent = "Cannot start the game while players are chosing a profile";
     }
     
     // display name taken error
@@ -55,6 +56,12 @@ sock.onmessage = function(event) {
     if (json.type === "wrong_game_id")
     {
         document.getElementById('error').innerHTML = "Wrong id";
+    }
+
+    // display forbidden access error when game is running
+    if (json.type === "cannot_join_running_game")
+    {
+        document.getElementById('error').innerHTML = "Cannot join, game has already started";
     }
     
     // join game by loading create_profile.html
@@ -113,7 +120,20 @@ sock.onmessage = function(event) {
         document.getElementById('responseMessage').textContent = "";
         document.getElementById('playersListContainer').style.display = "none";
 
+        // sort players by their points
+        let tmp;
+        for (let i = 0; i < players.length - 1; i++)
+        {
+            if (players[i].points < players[i + 1].points)
+            {
+                tmp = players[i + 1];
+                players[i + 1] = players[i];
+                players[i] = tmp;
+                i = -1;
+            }
+        }
+
         for (let i = 0; i < players.length; i++)
-            score.innerHTML += "<img src=" + players[i].picture + ">" + players[i].name + " : " + players[i].points + " pts<br>";
+            score.innerHTML += i + 1 + ". <img src=" + players[i].picture + ">" + players[i].name + " : " + players[i].points + " pts<br>";
     }
 };
