@@ -1,0 +1,20 @@
+<button onclick="changeContent('test_selection.html')">BACK</button>
+<div>
+    <br>
+
+    Difficulté :
+    <select id="level">
+        <option value="1" id="practice-level1">Très Facile</option>
+        <option value="2" id="practice-level2" selected>Facile</option>
+        <option value="3" id="practice-level3">Moyen</option>
+        <option value="4" id="practice-level4">Difficile</option>
+        <option value="5" id="practice-level5">Très Difficile</option>
+    </select>
+
+    <br><br>
+
+    Nombre de secondes par question :
+    <input id="timer" type="number" value="10" min="5" max="60" autocomplete="off" required><br><br>
+
+    <button onclick="confirmSettings()">Valider</button>
+</div>
