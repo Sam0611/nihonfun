@@ -32,11 +32,11 @@ function continue_game(game)
     }
 }
 
-// send to all players data containing the question content, question index and number of question
+// send to all players data containing the question content, question index, number of question and timer
 // set players not ready
 function send_next_question(game)
 {
-    data = [game.data[game.index][0], game.index + 1, game.questionNumbers];
+    data = [game.data[game.index][0], game.index + 1, game.questionNumbers, game.timer];
     send_data_to_players(game, "new_question", data);
     for (let i = 0; i < game.players.length; i++)
         game.players[i].ready = false;
@@ -239,8 +239,13 @@ s.on('connection', (ws) => {
             }))
             user.ready = true;
 
+            // update player points
             if (message.data == game.data[game.index][1])
+            {
                 user.points++;
+                if (message.countdown >= game.timer - 5)
+                    user.points++;
+            }
             else
                 user.points--;
 

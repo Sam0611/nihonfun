@@ -78,20 +78,12 @@ sock.onmessage = function(event) {
         {
             changeContent("game.html")
             .then( data => {
-                document.getElementById('question').textContent = json.data[0];
-                document.getElementById('answerContainer').style.display = "block";
-                document.getElementById('responseMessage').textContent = "";
-                document.getElementById('questionNum').textContent = json.data[1];
-                document.getElementById('questionLen').textContent = json.data[2];
+                display_quiz(json.data);
             });
         }
         else
         {
-            document.getElementById('question').textContent = json.data[0];
-            document.getElementById('answerContainer').style.display = "block";
-            document.getElementById('responseMessage').textContent = "";
-            document.getElementById('questionNum').textContent = json.data[1];
-            document.getElementById('questionLen').textContent = json.data[2];
+            display_quiz(json.data);
             if (document.querySelector("input"))
                 document.querySelector("input").focus();
         }
@@ -103,6 +95,8 @@ sock.onmessage = function(event) {
         let message = "";
         if (json.data == json.answer)
             message = json.data + " is a correct answer";
+        else if (json.data == "")
+            message = json.data + "Time's up ! Correct answer is " + json.answer;
         else
             message = json.data + " is a wrong answer, correct answer is " + json.answer;
         document.getElementById('answerContainer').style.display = "none";
