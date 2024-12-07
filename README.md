@@ -1,9 +1,10 @@
 # nihonfun
-online japanese quiz using node.js and websockets
+<h2 style="color:red;text-align:center">online japanese quiz using node.js and websockets</h2>
 
-Open your shell in server directory and run :
-node index.js
-It will start a server for websockets listening to port 5500 (you can change port number in server_conf.js).
+Open your shell in server directory and run :<br>
+npm install<br>
+node index.js<br>
+It will install the needed dependencies and start a server for websockets listening to port 5500 (you can change port number in client_conf.js and server_conf.js).
 
 Then, you will need a live server to run the website since it's a single page application (using fetch).
 To do so, you can install the "Live Server" extension on Visual Studio Code and then click on "Go Live" at the bottom right to start the server.
