@@ -1,14 +1,14 @@
 
 let s = require('./server_conf.js');
 
-const classes = require('./utils/class.js');
-const Game = classes.gameClass;
-const Player = classes.playerClass;
-
 const utils = require('./utils/utils.js');
 const send_data_to_players = utils.send_data_to_players;
 const disconnect_player = utils.disconnect_player;
 const delete_game = utils.delete_game;
+
+const init = require('./utils/init.js');
+const init_game = init.init_game;
+const init_player = init.init_player;
 
 let games = [];
 
@@ -79,71 +79,33 @@ s.on('connection', (ws) => {
 
         message = JSON.parse(message);
 
-
-        /*  *   *   *   *   INIT GAME   *   *   *   *   */
-
-
-        // create game with name received (message.data) and random ID
-        if (message.type === "test_name")
+        switch (message.type)
         {
-            const generateID = utils.generateID;
-            let id = generateID();
-            for (let i = 0; i < games.length; i++)
-            {
-                if (id == games[i].id)
-                {
-                    id = generateID();
-                    i = -1;
-                }
-            }
-            game = new Game(id, message.data);
-        }
-        
-        // add game settings
-        if (message.type === "test_settings")
-        {
-            game.questionNumbers = message.nquestion > game.data.length ? game.data.length : message.nquestion;
-            game.level = message.level;
-            game.timer = message.timer;
-            games.push(game);
-            isCreator = true;
+            case "test_name": // create game with name received (message.data) and random ID
+                game = init_game(games, message.data);
+                break ;
 
-            // send game id to display
-            ws.send(JSON.stringify({
-                type: "game_id",
-                data: game.id
-            }));
-        }
+            case "test_settings": // set game settings
+                game.set_settings(message);
+                games.push(game);
+                isCreator = true;
+                ws.send(JSON.stringify({
+                    type: "game_id",
+                    data: game.id
+                }));
+                break ;
 
-        // create a player with a name and picture
-        // and add it to game players list
-        if (message.type === "create_player")
-        {
-            if (!game)
-                return ;
-
-            // check if name is taken
-            for (let i = 0; i < game.players.length; i++)
-            {
-                if (message.name == game.players[i].name)
-                {
-                    ws.send(JSON.stringify({
-                        type: "pseudo_error"
-                    }))
+            case "create_player": // create a player with a name and picture and add it to game players list
+                user = init_player(game, ws, message);
+                if (!user)
                     return ;
-                }
-            }
-
-            user = new Player(message.name, message.picture);
-
-            if (isCreator)
-                game.creator = user;
-            game.players.push(user);
-            game.sockets.push(ws);
-            game.comingPlayers--;
-
-            // send player list to all players
-            send_data_to_players(game, "players_list", game.players);
+                if (isCreator)
+                    game.creator = user;
+                game.players.push(user);
+                game.sockets.push(ws);
+                game.comingPlayers--;
+                send_data_to_players(game, "players_list", game.players);
+                break ;
         }
 
         
@@ -170,7 +132,8 @@ s.on('connection', (ws) => {
             if (!game)
             {
                 ws.send(JSON.stringify({
-                    type: "wrong_game_id"
+                    type: "error",
+                    data: "Wrong id"
                 }))
                 return ;
             }
@@ -189,24 +152,8 @@ s.on('connection', (ws) => {
             // access not granted, send error
             game = null;
             ws.send(JSON.stringify({
-                type: "cannot_join_running_game"
-            }))
-        }
-
-        
-        /*  *   *   *   *   SEND SETTINGS   *   *   *   *   */
-
-
-        // get game settings
-        if (message.type === "get_settings")
-        {
-            ws.send(JSON.stringify({
-                type: "game_settings",
-                name: game.name,
-                nquestion: game.questionNumbers,
-                level: game.level,
-                timer: game.timer,
-                isCreator: isCreator
+                type: "error",
+                data: "Cannot join, game has already started"
             }))
         }
 
@@ -221,7 +168,8 @@ s.on('connection', (ws) => {
             if (game.comingPlayers)
             {
                 ws.send(JSON.stringify({
-                    type: "waiting_for_players"
+                    type: "error",
+                    data: "Cannot start the game while players are chosing a profile"
                 }))
                 return ;
             }

@@ -1,19 +1,27 @@
+
+let test_name;
+let nquestion;
+let timer;
+let level;
+let isCreator = false;
+
 // send test name to server
 function initGame(event)
 {
-    let name = event.target.getAttribute('name');
+    test_name = event.target.getAttribute('name');
     sock.send(JSON.stringify({
         type: "test_name",
-        data: name
+        data: test_name
     }))
 }
 
 // send game settings to server and load create_profile.html
 function confirmSettings()
 {
-    let nquestion = document.getElementById('nquestion').value;
-    let timer = document.getElementById('timer').value;
-    let level = document.getElementById('level').value; // 1 - 5
+    nquestion = document.getElementById('nquestion').value;
+    timer = document.getElementById('timer').value;
+    level = document.getElementById('level').value; // 1 - 5
+    isCreator = true;
     sock.send(JSON.stringify({
         type: "test_settings",
         nquestion : nquestion,

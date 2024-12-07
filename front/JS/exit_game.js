@@ -8,4 +8,5 @@ function exit_test()
     changeContent("index.html");
     document.getElementById('gameID').style.display = "none";
     document.getElementById('playersListContainer').style.display = "none";
+    isCreator = false;
 }

@@ -25,6 +25,13 @@ class Game
         else
             this.data = shuffleArray(katakanas);
     }
+
+    set_settings(data)
+    {
+        this.questionNumbers = data.nquestion > this.data.length ? this.data.length : data.nquestion;
+        this.level = data.level;
+        this.timer = data.timer;
+    }
 }
 
 class Player
