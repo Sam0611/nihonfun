@@ -1,0 +1,16 @@
+<button onclick="exit_test()">EXIT</button>
+
+<div id="countdown"></div>
+
+<h2 id="questionCounter">Question <span id="questionNum"></span> / <span id="questionLen"></span></h2>
+
+<h1 id="question"></h1>
+
+<div id="answerContainer">
+    <input id="answer" onkeypress="validate(event, validate_answer)" autocomplete="off">
+    <button onclick="validate_answer()">valider</button>
+</div>
+
+<div id="responseMessage"></div>
+
+<div id="scoreContainer"></div>

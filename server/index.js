@@ -1,11 +1,11 @@
 
 let s = require('./server_conf.js');
 
-const classes = require('./class.js');
+const classes = require('./utils/class.js');
 const Game = classes.gameClass;
 const Player = classes.playerClass;
 
-const utils = require('./utils.js');
+const utils = require('./utils/utils.js');
 const send_data_to_players = utils.send_data_to_players;
 const disconnect_player = utils.disconnect_player;
 const delete_game = utils.delete_game;

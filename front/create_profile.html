@@ -1,0 +1,12 @@
+<button onclick="exit_test()">EXIT</button>
+
+<div id="get_pseudo">
+    <div id="chooseIMG">
+        <img class="arrow" id="left_arrow" src="front/ressources/img/arrow.png" onclick="change_picture(-1)">
+        <img id="picture" src="front/ressources/img_profil/Akame.png">
+        <img class="arrow" id="right_arrow" src="front/ressources/img/arrow.png" onclick="change_picture(1)">
+    </div>
+    <input placeholder="name" type="text" id="username" onkeypress="validate(event, confirm_profile)" autocomplete="off">
+    <button type="submit" onclick="confirm_profile()">ENTER</button>
+    <div id="error"></div>
+</div>
