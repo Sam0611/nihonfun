@@ -34,8 +34,8 @@ s.on('connection', (ws) => {
                 games.push(game);
                 isCreator = true;
                 ws.send(JSON.stringify({
-                    type: "game_id",
-                    data: game.id
+                    type: "game_infos",
+                    data: [game.id, game.questionNumbers]
                 }));
                 break ;
 

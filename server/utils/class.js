@@ -1,5 +1,6 @@
 const hiraganas = require('../ressources/hiraganas.js');
 const katakanas = require('../ressources/katakanas.js');
+const kanjis = require('../ressources/kanjis.js');
 const shuffleArray = require('./utils.js').shuffleArray;
 
 class Game
@@ -20,10 +21,18 @@ class Game
         this.running = false;
         this.comingPlayers = 1;
 
-        if (name == "hiraganas")
-            this.data = shuffleArray(hiraganas);
-        else
-            this.data = shuffleArray(katakanas);
+        switch (name)
+        {
+            case "hiraganas":
+                this.data = shuffleArray(hiraganas);
+                break ;
+            case "katakanas":
+                this.data = shuffleArray(katakanas);
+                break ;
+            case "kanjis":
+                this.data = shuffleArray(kanjis);
+                break ;
+        }
     }
 
     set_settings(data)

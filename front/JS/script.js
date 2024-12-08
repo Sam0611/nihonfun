@@ -5,8 +5,9 @@ sock.onmessage = function(event) {
 
     switch (json.type)
     {
-        case "game_id": // display game id
-            document.getElementById('gameID').textContent = "ID : " + json.data;
+        case "game_infos": // display game id (data[0]) and update question number (data[1])
+            document.getElementById('gameID').textContent = "ID : " + json.data[0];
+            nquestion = json.data[1];
             break ;
 
         case "players_list": // display game players and settings

@@ -134,6 +134,13 @@ function send_next_question(game)
         answers = shuffleArray(answers);
     }
 
+    // if kanji test very hard, 12 answers
+    if (game.name == "kanjis" && game.level == "5")
+    {
+        push_answers(game, answers, 11);
+        answers = shuffleArray(answers);
+    }
+
     data = [game.data[game.index][0], game.index + 1, answers];
     send_data_to_players(game, "new_question", data);
     for (let i = 0; i < game.players.length; i++)
