@@ -8,10 +8,61 @@ body {
 }
 
 header{
-    position: fixed;
+    position: relative;
     background: rgba(255, 255, 255, 0.2);
     text-shadow: 0 2px 2px #000;
     font-family: Nunito;
+}
+
+main{
+    position: relative;
+    margin: auto;
+    padding: 20px;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0.3px 0.7px rgba(0, 0, 0, 0.126),
+    0 0.9px 1.7px rgba(0, 0, 0, 0.179), 0 1.8px 3.5px rgba(0, 0, 0, 0.224),
+    0 3.7px 7.3px rgba(0, 0, 0, 0.277), 0 10px 20px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+    transition: 0.4s ease;
+
+    button{
+        background: color-mix(in oklab, black, transparent 95%);
+        backdrop-filter: blur(6px);
+        border-radius: 9999rem;
+        padding: 10px;
+        margin: 10px;
+        transition: 0.4s ease;
+        font-size: 1.3em;
+        box-shadow: 0 -1px 0 0 color-mix(in oklab, white, transparent 50%), 0 1px 0 0 color-mix(in oklab, white, transparent 50%), -1px 0 0 0 color-mix(in oklab, black, transparent 50%), 1px 0 0 0 color-mix(in oklab, black, transparent 50%);
+        
+        &:hover {
+            scale: 1.05;
+            transition: scale 200ms ease-out;
+            
+            &::before {
+              background: color-mix(in oklab, black, transparent 95%);
+            }
+          }
+
+        &:active {
+            scale: 1;
+            transition: scale 100ms ease-out;
+        }
+    }
+}
+
+#settings{
+    display: flex;
+    flex-direction: column;
+}
+
+#settings > div{
+    margin: 10px;
+}
+
+#backButton{
+    color: white;
 }
 
 #button-container{

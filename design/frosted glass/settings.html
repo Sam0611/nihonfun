@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <header class="text-white p-5 text-center w-full">
+        <h1 class="text-5xl font-bold">NIHONFUN</h1>
+    </header>
+
+    <main class="relative flex flex-wrap items-center h-60 flex-col">
+        <section id="settings">
+            <div>
+                Nombre de questions :
+                <input id="nquestion" type="number" value="20" min="1" autocomplete="off" required>
+            </div>
+            <div>
+                Difficulté :
+                <select id="level">
+                    <option value="1" id="practice-level1">Très Facile</option>
+                    <option value="2" id="practice-level2" selected>Facile</option>
+                    <option value="3" id="practice-level3">Moyen</option>
+                    <option value="4" id="practice-level4">Difficile</option>
+                    <option value="5" id="practice-level5">Très Difficile</option>
+                </select>
+            </div>
+            <div>
+                Nombre de secondes par question :
+                <input id="timer" type="number" value="10" min="5" max="60" autocomplete="off" required>
+            </div>
+            <button onclick="confirmSettings()">Valider</button>
+        </section>
+    </main>
+
+    <footer>
+        <button id="backButton" onclick="goto('index.html')">BACK</button>
+    </footer>
+
+</body>
+<script>
+
+    function goto(link)
+    {
+        window.location.href = link;
+    }
+
+</script>
+</html>
