@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <header class="text-white p-5 text-center w-full">
+        <h1 class="text-5xl font-bold">NIHONFUN</h1>
+    </header>
+
+    <div id="button-container" class="flex flex-col flex-grow">
+
+        <div class="button" onclick="fct(0)">
+          <div class="button-title">Créer une partie</div>
+        </div>
+      
+        <div class="button" onclick="fct(1)">
+          <div class="button-title">Rejoindre une partie</div>
+        </div>
+
+        <div class="user-input">
+            <div id="input-label">Entrez un identifiant :</div>
+            <div>
+                <input maxlength="6"><div id="submit-button">Valider</div>
+            </div>
+            <button onclick="getBack()">RETOUR</button>
+        </div>
+
+    </div>
+    
+</body>
+<script>
+
+    function fct(n)
+    {
+        // buttons disappear
+        document.getElementsByClassName('button')[n].style.opacity = 0;
+        document.getElementsByClassName('button')[n].style.transform = "scale(0)";
+        setTimeout(() => {
+            for (let i = 0; document.getElementsByClassName('button')[i]; i++)
+            {
+                document.getElementsByClassName('button')[i].style.opacity = 0;
+                document.getElementsByClassName('button')[i].style.transform = "scale(0)";
+            }
+        }, 150);
+
+        // buttons or input appears
+        setTimeout(() => {
+            if (n == 0)
+            {
+                for (let i = 0; document.getElementsByClassName('button')[i]; i++)
+                {
+                    document.getElementsByClassName('button')[i].style.display = "flex";
+                    document.getElementsByClassName('button')[i].style.opacity = 1;
+                    document.getElementsByClassName('button')[i].style.transform = "scale(1)";
+                }
+            }
+            else
+            {
+                for (let i = 0; document.getElementsByClassName('button')[i]; i++)
+                    document.getElementsByClassName('button')[i].style.display = "none";
+                document.getElementsByClassName('user-input')[0].style.display = "flex";
+                setTimeout(() => {document.getElementsByClassName('user-input')[0].style.transform = "scale(1)";}, 30);
+            }
+        }, 600);
+    }
+
+    function getBack()
+    {
+        // input disappears
+        document.getElementsByClassName('user-input')[0].style.transform = "scale(0)";
+
+        // buttons appear
+        setTimeout(() => {
+            for (let i = 0; document.getElementsByClassName('button')[i]; i++)
+            {
+                document.getElementsByClassName('user-input')[0].style.display = "none";
+                document.getElementsByClassName('button')[i].style.display = "flex";
+                setTimeout(() => {
+                    document.getElementsByClassName('button')[i].style.opacity = 1;
+                    document.getElementsByClassName('button')[i].style.transform = "scale(1)";
+                }, 30);
+            }
+        }, 500);
+    }
+
+</script>
+</html>
