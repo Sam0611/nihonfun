@@ -9,6 +9,6 @@ function updateCountdown()
         countdownElement.textContent += "0";
     countdownElement.textContent += countdownSeconds;
     if (countdownSeconds == 0)
-        validate_answer();
+        validate_answer(null);
     countdownSeconds--;
 }

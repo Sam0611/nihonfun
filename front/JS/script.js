@@ -18,9 +18,6 @@ sock.onmessage = function(event) {
                 settings.textContent = test_name + " Level " + level + ", time : " + timer + ", question : " + nquestion;
                 if (!isCreator)
                     document.getElementById('start_game').style.display = "none";
-                // sock.send(JSON.stringify({
-                //     type: "get_settings"
-                // }))
             });
 
             document.getElementById('playersListContainer').style.display = "block";

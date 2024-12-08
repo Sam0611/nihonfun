@@ -69,4 +69,97 @@ function delete_game(game, games)
     game = null;
 }
 
-module.exports = {shuffleArray, generateID, send_data_to_players, disconnect_player, delete_game};
+// if all players are ready, send next question or the end of game
+function continue_game(game)
+{
+    for (let i = 0; i < game.players.length; i++)
+        if (game.players[i].ready == false)
+            return ;
+
+    game.index++;
+    
+    if (game.index < game.questionNumbers)
+    {
+        setTimeout(send_next_question, 3000, game);
+    }
+    else
+    {
+        setTimeout(send_data_to_players, 3000, game, "end_game", game.players);
+        game.running = false;
+    }
+}
+
+// player and his socket become disconnected
+// if there is no player left, delete game
+// update players list
+// if is creator, it becomes another player
+// continue game if all remaining players are ready
+function exit_game(game, games, user, ws, isCreator)
+{
+    disconnect_player(game, user, ws);
+
+    if (game.players.length == 0)
+    {
+        delete_game(game, games);
+        return ;
+    }
+
+    send_data_to_players(game, "update_players_list", game.players);
+
+    if (isCreator)
+    {
+        game.sockets[0].send(JSON.stringify({
+            type: "new_game_creator"
+        }))
+    }
+
+    continue_game(game);
+}
+
+// send to all players data containing the question content, question index
+// set players not ready
+function send_next_question(game)
+{
+    let answers = [game.data[game.index][1]];
+    switch (game.level)
+    {
+        case "4": // answer + 3
+            push_answers(game, answers, 3);
+        case "3": // answer + 2
+            push_answers(game, answers, 2);
+        case "2": // answer + 2
+            push_answers(game, answers, 2);
+        case "1": // answer + 1
+            push_answers(game, answers, 1);
+        answers = shuffleArray(answers);
+    }
+
+    data = [game.data[game.index][0], game.index + 1, answers];
+    send_data_to_players(game, "new_question", data);
+    for (let i = 0; i < game.players.length; i++)
+        game.players[i].ready = false;
+}
+
+function push_answers(game, answers, n)
+{
+    let len = game.data.length;
+    let rd;
+    let to_insert;
+    while (n)
+    {
+        rd = Math.floor(Math.random() * len);
+        to_insert = game.data[rd][1];
+        for (let i = 0; i < answers.length; i++)
+        {
+            if (to_insert == answers[i])
+                to_insert = "";
+        }
+        if (to_insert)
+        {
+            answers.push(to_insert);
+            n--;
+        }
+    }
+}
+
+module.exports = {shuffleArray, generateID, send_data_to_players, disconnect_player, delete_game, continue_game, exit_game, send_next_question};
