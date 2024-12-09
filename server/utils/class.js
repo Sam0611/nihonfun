@@ -20,6 +20,7 @@ class Game
         this.index = 0;
         this.running = false;
         this.comingPlayers = 1;
+        this.revert = false;
 
         switch (name)
         {
@@ -40,6 +41,7 @@ class Game
         this.questionNumbers = data.nquestion > this.data.length ? this.data.length : data.nquestion;
         this.level = data.level;
         this.timer = data.timer;
+        this.revert = data.revert;
     }
 }
 

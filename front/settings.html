@@ -1,5 +1,5 @@
 <button id="backButton" onclick="changeContent('front/test_selection.html')">BACK</button>
-<div>
+<div class="p-5">
     <br>
 
     Nombre de questions :
@@ -19,7 +19,21 @@
     <br><br>
 
     Nombre de secondes par question :
-    <input id="timer" type="number" value="10" min="5" max="60" autocomplete="off" required><br><br>
+    <input id="timer" type="number" value="10" min="5" max="60" autocomplete="off" required>
+    
+    <br><br>
 
-    <button onclick="confirmSettings()">Valider</button>
+    <div id="revert-setting-container" class="flex justify-center">
+        <div>
+            Questions : <span id="question_lang">JP</span><br>
+            Réponses : <span id="answer_lang">FR</span><br>
+        </div>
+        <div id="revert-icon-container">
+            <img onclick="revert_languages()" id="revert_icon" src="front/ressources/img/revert_arrows.png">
+        </div>
+    </div>
+
+    <br>
+
+    <button id="validate-button" onclick="confirmSettings()">Valider</button>
 </div>

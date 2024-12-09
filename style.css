@@ -102,3 +102,39 @@ header{
         scale: 0.95;
     }
 }
+
+#revert-setting-container{
+    gap: 20px;
+}
+
+#revert-icon-container{
+    align-content: center;
+}
+
+#revert_icon{
+    height: 30px;
+}
+
+#validate-button{
+    background: color-mix(in oklab, black, transparent 95%);
+    backdrop-filter: blur(6px);
+    border-radius: 9999rem;
+    padding: 10px;
+    transition: 0.4s ease;
+    box-shadow: 0 -1px 0 0 color-mix(in oklab, white, transparent 50%), 0 1px 0 0 color-mix(in oklab, white, transparent 50%), -1px 0 0 0 color-mix(in oklab, black, transparent 50%), 1px 0 0 0 color-mix(in oklab, black, transparent 50%);
+    width: 80%;
+
+    &:hover {
+        scale: 1.05;
+        transition: scale 200ms ease-out;
+        
+        &::before {
+          background: color-mix(in oklab, black, transparent 95%);
+        }
+      }
+
+    &:active {
+        scale: 1;
+        transition: scale 100ms ease-out;
+    }
+}

@@ -89,6 +89,62 @@ function continue_game(game)
     }
 }
 
+// send to all players data containing the question content, question index
+// set players not ready
+function send_next_question(game)
+{
+    let i = !game.revert ? 0 : 1; // question index
+    let j = !game.revert ? 1 : 0; // answer index
+    let answers = [game.data[game.index][j]];
+    switch (game.level)
+    {
+        case "4": // answer + 3
+            push_answers(game, answers, 3);
+        case "3": // answer + 2
+            push_answers(game, answers, 2);
+        case "2": // answer + 2
+            push_answers(game, answers, 2);
+        case "1": // answer + 1
+            push_answers(game, answers, 1);
+        answers = shuffleArray(answers);
+    }
+
+    // if kanji test very hard, 12 answers
+    if (game.name == "kanjis" && game.level == "5")
+    {
+        push_answers(game, answers, 11);
+        answers = shuffleArray(answers);
+    }
+
+    data = [game.data[game.index][i], game.index + 1, answers];
+    send_data_to_players(game, "new_question", data);
+    for (let n = 0; n < game.players.length; n++)
+        game.players[n].ready = false;
+}
+
+function push_answers(game, answers, n)
+{
+    let j = !game.revert ? 1 : 0;
+    let len = game.data.length;
+    let rd;
+    let to_insert;
+    while (n)
+    {
+        rd = Math.floor(Math.random() * len);
+        to_insert = game.data[rd][j];
+        for (let i = 0; i < answers.length; i++)
+        {
+            if (to_insert == answers[i])
+                to_insert = "";
+        }
+        if (to_insert)
+        {
+            answers.push(to_insert);
+            n--;
+        }
+    }
+}
+
 // player and his socket become disconnected
 // if there is no player left, delete game
 // update players list
@@ -114,59 +170,6 @@ function exit_game(game, games, user, ws, isCreator)
     }
 
     continue_game(game);
-}
-
-// send to all players data containing the question content, question index
-// set players not ready
-function send_next_question(game)
-{
-    let answers = [game.data[game.index][1]];
-    switch (game.level)
-    {
-        case "4": // answer + 3
-            push_answers(game, answers, 3);
-        case "3": // answer + 2
-            push_answers(game, answers, 2);
-        case "2": // answer + 2
-            push_answers(game, answers, 2);
-        case "1": // answer + 1
-            push_answers(game, answers, 1);
-        answers = shuffleArray(answers);
-    }
-
-    // if kanji test very hard, 12 answers
-    if (game.name == "kanjis" && game.level == "5")
-    {
-        push_answers(game, answers, 11);
-        answers = shuffleArray(answers);
-    }
-
-    data = [game.data[game.index][0], game.index + 1, answers];
-    send_data_to_players(game, "new_question", data);
-    for (let i = 0; i < game.players.length; i++)
-        game.players[i].ready = false;
-}
-
-function push_answers(game, answers, n)
-{
-    let len = game.data.length;
-    let rd;
-    let to_insert;
-    while (n)
-    {
-        rd = Math.floor(Math.random() * len);
-        to_insert = game.data[rd][1];
-        for (let i = 0; i < answers.length; i++)
-        {
-            if (to_insert == answers[i])
-                to_insert = "";
-        }
-        if (to_insert)
-        {
-            answers.push(to_insert);
-            n--;
-        }
-    }
 }
 
 module.exports = {shuffleArray, generateID, send_data_to_players, disconnect_player, delete_game, continue_game, exit_game, send_next_question};

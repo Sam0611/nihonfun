@@ -11,6 +11,8 @@ sock.onmessage = function(event) {
             break ;
 
         case "players_list": // display game players and settings
+            let player_list;
+            [player_list, test_name, level, timer, nquestion] = json.data;
             changeContent("front/wait_room.html")
             .then( data => {
                 let settings = document.getElementById('game_settings');
@@ -22,7 +24,7 @@ sock.onmessage = function(event) {
             });
 
             document.getElementById('playersListContainer').style.display = "block";
-            update_players_list(json.data);
+            update_players_list(player_list);
             break ;
 
         case "update_players_list": // update game players list

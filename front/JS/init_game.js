@@ -4,6 +4,7 @@ let nquestion;
 let timer;
 let level;
 let isCreator = false;
+let revert = false;
 
 // send test name to server
 function initGame(event)
@@ -13,6 +14,17 @@ function initGame(event)
         type: "test_name",
         data: test_name
     }))
+    revert = false;
+}
+
+// revert question and answer languages
+function revert_languages()
+{
+    revert = !revert;
+    let question_lang = document.getElementById("question_lang").textContent;
+    let answer_lang = document.getElementById("answer_lang").textContent;
+    document.getElementById("question_lang").textContent = answer_lang;
+    document.getElementById("answer_lang").textContent = question_lang;
 }
 
 // send game settings to server and load create_profile.html
@@ -26,7 +38,8 @@ function confirmSettings()
         type: "test_settings",
         nquestion : nquestion,
         timer: timer,
-        level: level
+        level: level,
+        revert: revert
     }))
     changeContent("front/create_profile.html");
     document.getElementById('gameID').style.display = "block";

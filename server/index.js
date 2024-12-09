@@ -48,7 +48,7 @@ s.on('connection', (ws) => {
                 game.players.push(user);
                 game.sockets.push(ws);
                 game.comingPlayers--;
-                send_data_to_players(game, "players_list", game.players);
+                send_data_to_players(game, "players_list", [game.players, game.name, game.level, game.timer, game.questionNumbers]);
                 break ;
         }
 
@@ -124,15 +124,17 @@ s.on('connection', (ws) => {
 
         if (message.type === "check_answer")
         {
+            let i = !game.revert ? 1 : 0;
+
             ws.send(JSON.stringify({
                 type: "check_answer",
                 data: message.data,
-                answer: game.data[game.index][1]
+                answer: game.data[game.index][i]
             }))
             user.ready = true;
 
             // update player points
-            if (message.data == game.data[game.index][1])
+            if (message.data == game.data[game.index][i])
             {
                 user.points++;
                 if (message.countdown >= game.timer - 5)
