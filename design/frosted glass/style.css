@@ -61,8 +61,31 @@ main{
     margin: 10px;
 }
 
+#settings select, input{
+    background: color-mix(in oklab, black, transparent 95%);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 -1px 0 0 color-mix(in oklab, white, transparent 50%), 0 1px 0 0 color-mix(in oklab, white, transparent 50%), -1px 0 0 0 color-mix(in oklab, black, transparent 50%), 1px 0 0 0 color-mix(in oklab, black, transparent 50%);
+}
+
+option{
+    background-color: slategray;
+    &:hover {
+        background-color: red;
+    }
+}
+
 #backButton{
     color: white;
+    text-shadow: #FFF 0 0 10px;
+    font-weight: bold;
+    font-size: 1.5em;
+    padding: 10px;
+    transition: 0.2s ease;
+
+    &:hover {
+        text-shadow: #FFF 0 0 5px;
+        scale: 0.95;
+    }
 }
 
 #button-container{
