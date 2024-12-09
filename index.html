@@ -3,16 +3,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
     <title>Nihonfun</title>
     <link rel="shortcut icon" href="img/icon.png">
 </head>
 <style>
-    
-    #content{
-        display: flex;
-        flex-direction: column;
-        text-align: center;
-    }
     
     .test_name{
         background-color: darkgray;
@@ -83,13 +79,15 @@
     }
     
 </style>
-<body>
+<body class="flex flex-col min-h-screen">
+
+    <header class="text-white p-5 text-center w-full">
+        <h1 class="text-5xl font-bold">NIHONFUN</h1>
+    </header>
 
     <div id="gameID">ID : </div>
     
-    <div id="content">
-        <div onclick="changeContent('front/test_selection.html')" class="test_name">CREER UNE PARTIE</div>
-        <div onclick="changeContent('front/join_game.html')" class="test_name">REJOINDRE</div>
+    <div id="content" class="flex flex-col flex-grow justify-center">
     </div>
 
     <div id="playersListContainer">
@@ -106,6 +104,8 @@
     // sock.onopen = () => {
     //     console.log("hi !");
     // }
+
+    changeContent('front/home.html');
     
     function changeContent(page)
     {

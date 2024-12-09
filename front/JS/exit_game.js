@@ -5,7 +5,7 @@ function exit_test()
         type: "test_exit"
     }))
     clearInterval(countdownInterval);
-    changeContent("index.html");
+    changeContent("front/home.html");
     document.getElementById('gameID').style.display = "none";
     document.getElementById('playersListContainer').style.display = "none";
     isCreator = false;

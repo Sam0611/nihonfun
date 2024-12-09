@@ -1,0 +1,104 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:200");
+@import url(https://fonts.googleapis.com/css?family=Nunito);
+
+body {
+    background: url(https://i.loli.net/2019/11/17/GAYyzeKsiWjP5qO.jpg);
+    background-size: cover;
+    background-position: center;
+}
+
+header{
+    position: relative;
+    background: rgba(255, 255, 255, 0.2);
+    text-shadow: 0 2px 2px #000;
+    font-family: Nunito;
+}
+
+#content{
+    text-align: center;
+    align-items: center;
+    margin: auto;
+}
+
+#content > div {
+    align-items: center;
+    background: rgba(255, 255, 255, 0.3);
+    margin: 20px;
+    box-shadow: 0 0.3px 0.7px rgba(0, 0, 0, 0.126),
+    0 0.9px 1.7px rgba(0, 0, 0, 0.179), 0 1.8px 3.5px rgba(0, 0, 0, 0.224),
+    0 3.7px 7.3px rgba(0, 0, 0, 0.277), 0 10px 20px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+    transition: 0.4s ease;
+}
+
+#content .button {
+    display: flex;
+    width: 60vw;
+    height: 20vh;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover {
+        box-shadow: 0 0.7px 1px rgba(0, 0, 0, 0.157),
+        0 1.7px 2.6px rgba(0, 0, 0, 0.224), 0 3.5px 5.3px rgba(0, 0, 0, 0.28),
+        0 7.3px 11px rgba(0, 0, 0, 0.346), 0 20px 30px rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(10px);
+        width: 63vw;
+        height: 21vh;
+        font-size: 1.1em;
+    }
+
+    .button-title {
+        font-size: 2em;
+        font-family: Lato, sans-serif;
+        letter-spacing: 0.2em;
+        color: black;
+
+        @media (max-width: 640px) {
+            font-size: 2em;
+        }
+    }
+}
+
+#question{
+    font-weight: bold;
+    font-size: 2em;
+}
+
+#questionCounter{
+    font-size: 1.5em;
+}
+
+#countdown{
+    padding: 10px;
+    font-size: 1.5em;
+}
+
+.answerButtons{
+    margin: 10px;
+    border: 1px solid black;
+    padding: 10px;
+    font-size: 1.2em;
+    background-color: white;
+    transition: 0.3s ease;
+
+    &:hover {
+        background-color: grey;
+    }
+}
+
+#backButton{
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(20px);
+    color: white;
+    text-shadow: #000 0 0 10px;
+    font-weight: bold;
+    font-size: 1.5em;
+    padding: 10px;
+    transition: 0.2s ease;
+
+    &:hover {
+        text-shadow: #000 0 0 5px;
+        scale: 0.95;
+    }
+}
