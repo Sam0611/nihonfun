@@ -17,7 +17,7 @@ header{
 main{
     position: relative;
     margin: auto;
-    padding: 20px;
+    padding: 30px;
     align-items: center;
     background: rgba(255, 255, 255, 0.3);
     box-shadow: 0 0.3px 0.7px rgba(0, 0, 0, 0.126),
@@ -33,7 +33,6 @@ main{
         padding: 10px;
         margin: 10px;
         transition: 0.4s ease;
-        font-size: 1.3em;
         box-shadow: 0 -1px 0 0 color-mix(in oklab, white, transparent 50%), 0 1px 0 0 color-mix(in oklab, white, transparent 50%), -1px 0 0 0 color-mix(in oklab, black, transparent 50%), 1px 0 0 0 color-mix(in oklab, black, transparent 50%);
         
         &:hover {
@@ -55,6 +54,16 @@ main{
 #settings{
     display: flex;
     flex-direction: column;
+    font-size: 2em;
+}
+
+#settings-title{
+    text-align: center;
+    line-height: 2em;
+    text-shadow: #000 0 0 3px;
+    font-weight: bold;
+    font-size: 1.1em;
+    letter-spacing: 0.1em;
 }
 
 #settings > div{
@@ -62,6 +71,7 @@ main{
 }
 
 #settings select, input{
+    padding-left: 10px;
     background: color-mix(in oklab, black, transparent 95%);
     backdrop-filter: blur(6px);
     box-shadow: 0 -1px 0 0 color-mix(in oklab, white, transparent 50%), 0 1px 0 0 color-mix(in oklab, white, transparent 50%), -1px 0 0 0 color-mix(in oklab, black, transparent 50%), 1px 0 0 0 color-mix(in oklab, black, transparent 50%);
