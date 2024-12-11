@@ -60,15 +60,13 @@ let kanas = {
 function get_type(word)
 {
     let foundTypes = [];
-    for (let i = 0; i < type.length; i++)
+    for (let type in wordTypes)
     {
-        if (wordTypes[type[i]].includes(word))
-            foundTypes.push(type[i]);
+        if (wordTypes[type].includes(word))
+            foundTypes.push(type);
     }
     return (foundTypes);
 }
-
-let type = ["food", "drink", "reading", "writing", "listening", "watching", "animal", "buying", "swimming", "singing", "waiting"];
 
 let wordTypes = {
     "food": [
@@ -79,7 +77,7 @@ let wordTypes = {
         "eigakan no mae", "eigakan no ushiro", "eigakan no soba",
         "toshokan no mae", "toshokan no ushiro", "toshokan no soba",
         "taberu",
-        "sakana", "ringo", "tamago", "niku", "kudamono", "yasai"
+        "sakana", "ringo", "tamago", "niku", "kudamono", "yasai", "sushi"
     ],
 
     "drink": [
@@ -146,7 +144,7 @@ let wordTypes = {
     "buying": [
         "mise", "nihon",
         "kau",
-        "neko", "inu", "sakana", "uma", "usagi", "nezumi", "eiga", "ongaku", "hon", "shinbun", "manga", "mizu", "sake", "ringo", "tamago", "niku", "kudamono", "yasai"
+        "neko", "inu", "sakana", "uma", "usagi", "nezumi", "eiga", "ongaku", "hon", "shinbun", "manga", "mizu", "sake", "ringo", "tamago", "niku", "kudamono", "yasai", "sushi"
     ],
 
     "swimming": [
@@ -173,26 +171,114 @@ let wordTypes = {
         "toshokan no mae", "toshokan no ushiro", "toshokan no soba",
         "matsu",
         "watashi", "anata", "kare", "kanojo", "watashi tachi", "karera", "kanojo tachi", "tomodachi", "sensei", "kazoku"
+    ],
+
+    "helping": [
+        "gakkou", "ie", "toshokan", "mise", "eki", "yama", "hayashi", "umi", "nihon",
+        "eki", "yama", "hayashi", "nihon", "umi",
+        "eki no mae", "eki no ushiro", "eki no soba",
+        "gakkou no mae", "gakkou no ushiro", "gakkou no soba",
+        "mise no mae", "mise no ushiro", "mise no soba",
+        "eigakan no mae", "eigakan no ushiro", "eigakan no soba",
+        "toshokan no mae", "toshokan no ushiro", "toshokan no soba",
+        "tasukeru",
+        "watashi", "anata", "kare", "kanojo", "watashi tachi", "karera", "kanojo tachi", "tomodachi", "kazoku"
+    ],
+
+    "using": [
+        "gakkou", "ie", "nihon",
+        "tsukau",
+        "hashi"
+    ],
+
+    "working": [
+        "gakkou", "ie", "nihon", "mise", "eigakan", "toshokan", "eki",
+        "eki", "yama", "hayashi", "nihon", "umi",
+        "eki no mae", "eki no ushiro", "eki no soba",
+        "gakkou no mae", "gakkou no ushiro", "gakkou no soba",
+        "mise no mae", "mise no ushiro", "mise no soba",
+        "eigakan no mae", "eigakan no ushiro", "eigakan no soba",
+        "toshokan no mae", "toshokan no ushiro", "toshokan no soba",
+        "hataraku"
+    ],
+
+    "learning": [
+        "gakkou", "ie", "heya", "toshokan", "nihon",
+        "eki no mae", "eki no ushiro", "eki no soba",
+        "gakkou no mae", "gakkou no ushiro", "gakkou no soba",
+        "mise no mae", "mise no ushiro", "mise no soba",
+        "eigakan no mae", "eigakan no ushiro", "eigakan no soba",
+        "toshokan no mae", "toshokan no ushiro", "toshokan no soba",
+        "manabu",
+        "nihongo", "eigo", "kanji", "hiragana", "katakana"
+    ],
+
+    "finding": [
+        "gakkou", "ie", "mise", "niwa", "eki", "nihon", "hayashi", "yama",
+        "eki no mae", "eki no ushiro", "eki no soba",
+        "gakkou no mae", "gakkou no ushiro", "gakkou no soba",
+        "mise no mae", "mise no ushiro", "mise no soba",
+        "eigakan no mae", "eigakan no ushiro", "eigakan no soba",
+        "toshokan no mae", "toshokan no ushiro", "toshokan no soba",
+        "mitsukeru",
+        "hon", "shinbun", "manga", "hashi", "ai",
+        "neko", "inu", "usagi", "nezumi",
+        "ringo", "tamago", "kudamono", "yasai", "niku", "sakana", "mizu", "sake", "sushi",
+        "watashi", "anata", "kare", "kanojo", "watashi tachi", "karera", "kanojo tachi", "tomodachi", "sensei", "kazoku",
+        "watashi no inu", "anata no inu", "kare no inu", "kanojo no inu", "watashi tachi no inu", "anata tachi no inu", "karera no inu", "kanojo tachi no inu",
+        "watashi no neko", "anata no neko", "kare no neko", "kanojo no neko", "watashi tachi no neko", "anata tachi no neko", "karera no neko", "kanojo tachi no neko"
     ]
 };
 
-let needObjectVerbs = ["miru", "kau", "sagasu", "kiku"];
-let intransitiveVerbs = ["oyogu", "neru", "hashiru", "utau", "yasumu"];
+let needObjectVerbs = ["miru", "kau", "sagasu", "kiku", "tasukeru", "tsukau", "mitsukeru"];
+let intransitiveVerbs = ["oyogu", "neru", "hashiru", "utau", "yasumu", "asobu", "hataraku"];
 
 /*
 
 SUJET + WA + LIEU + DE + CO + WO + VERBE
 
+- sujet et / avec (to, ya)
+watashi ha tomodachi to eiga wo miru : je regarde un film avec un ami
+watashi to tomodachi ha eiga wo miru : un ami et moi regardons un film
+
+- conjugaison
+
+- aru/iru avec ga et ni
+niwa ni neko ga iru
+kare ha neko ga iru
+watashi ha gakkou ni iru
+
+- kanji
+
+- verifier réponse FR
+
+- mettre les mots dans le désordre et les remettre dans l'ordre coté utilisateur
+
 il y a / avoir (ga aru/iru)
 avec, et (to, ya)
-
 fonction conjuguate(), get_kanji()
+
+retraduire la phrase en japonais et comparer avec la phrase générée
+vérifier les mots principaux
+
+mitsukeru seulement au passé
 
 */
 
 function is_similar(subject, object)
 {
-    console.log(subject, object);
+    if (object.includes(subject))
+        return (true);
+
+    let w = subject.split(" ");
+    if (subject.includes(object))
+    {
+        let i = w.indexOf(object);
+        let j = w.indexOf("no", i);
+        if (j != i + 1)
+            return (true);
+    }
+
     return (false);
 }
 
@@ -289,12 +375,18 @@ let words = [
         "toshokan no mae", "toshokan no ushiro", "toshokan no soba"
     ],
     [
-        "ringo", "tamago", "kudamono", "yasai", "niku", "sakana", "mizu", "sake",
-        "hon", "shinbun", "manga", "ongaku", "eigo", "nihongo", "hiragana", "katakana", "kanji", "eiga",
+        "ringo", "tamago", "kudamono", "yasai", "niku", "sakana", "mizu", "sake", "sushi",
+        "hon", "shinbun", "manga", "ongaku", "eigo", "nihongo", "hiragana", "katakana", "kanji", "eiga", "hashi", "ai",
         "neko", "inu", "uma", "usagi", "nezumi",
-        "watashi", "anata", "kare", "kanojo", "watashi tachi", "karera", "kanojo tachi", "tomodachi", "sensei", "kazoku"
+        "watashi", "anata", "kare", "kanojo", "watashi tachi", "karera", "kanojo tachi", "tomodachi", "sensei", "kazoku",
+        "watashi no inu", "anata no inu", "kare no inu", "kanojo no inu", "watashi tachi no inu", "anata tachi no inu", "karera no inu", "kanojo tachi no inu",
+        "watashi no neko", "anata no neko", "kare no neko", "kanojo no neko", "watashi tachi no neko", "anata tachi no neko", "karera no neko", "kanojo tachi no neko"
     ],
-    ["taberu", "nomu", "yomu", "neru", "yasumu", "kau", "hashiru", "sagasu", "miru", "kiku", "kaku", "utau", "oyogu", "matsu"]
+    [
+        "miru", "kau", "sagasu", "kiku", "tasukeru", "tsukau", "mitsukeru",
+        "oyogu", "neru", "hashiru", "utau", "yasumu", "asobu", "hataraku",
+        "taberu", "nomu", "yomu", "kaku", "matsu", "manabu"
+    ]
 ];
 
 let dictionnary = [[], [], [], []];
