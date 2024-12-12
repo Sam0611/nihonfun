@@ -7,15 +7,190 @@
 </head>
 <style>
     
+    .draggable {
+            background-color: lightblue;
+            border: 1px solid #000;
+            position: absolute; display: inline-block;
+            padding: 10px;
+            cursor: default;
+            user-select: none;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        #container{
+            background-color: rgba(0, 0, 0, 0.1);
+            position: absolute; top: 10%; left: 10%;
+            width: 80%;
+            height: 40%;
+            z-index: -1;
+        }
+
+        #answer{
+            background-color: rgba(0, 0, 0, 0.2);
+            position: absolute; top: 60%; left: 10%;
+            width: 80%; height: 10%;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        #validate{
+            font-size: 1.3em;
+            position: absolute; top: 75%; left: 15%;
+            width: 71%;
+            padding: 10px;
+        }
+    
 </style>
 <body>
 
     <div id="test"></div>
+    <div id="container"></div>
+    <div id="answer"></div>
+    <button id="validate" onclick="checkAnswer()">Valider</button>
+    <div id="message"></div>
     
 </body>
+<script src="script.js"></script>
 <script>
 
+    let str = generate_sentence();
+    // document.getElementById("test").innerHTML += str + "<br>";
+    // document.getElementById("test").innerHTML += to_hiraganas(str) + "<br>";
+
+    let w = str.split(" ");
+    for (let i = 0; i < w.length; i++)
+    {
+        let elem = document.createElement("div");
+        elem.textContent = to_hiraganas(w[i]);
+        elem.classList.add("draggable");
+        document.body.appendChild(elem);
+    }
+
+    function checkAnswer()
+    {
+        let answer = document.getElementById("answer");
+        let answerString = "";
+        for (let i = 0; i < answer.childNodes.length; i++)
+        {
+            answerString += answer.childNodes[i].textContent;
+        }
+        if (answerString == to_hiraganas(str))
+            document.getElementById("message").textContent = "correct answer";
+        else
+            document.getElementById("message").textContent = "wrong answer";
+    }
+
+    let draggable = document.getElementsByClassName('draggable');
+    for (let i = 0; i < draggable.length; i++)
+    {
+        // place element randomly
+        let posX = Math.floor(Math.random() * 30 + 11); // vertical
+        let posY = Math.floor(Math.random() * 60 + 16); // horizontal
+        draggable[i].style.top = posX.toString() +  "%";
+        draggable[i].style.left = posY.toString() +  "%";
+        let time_out = 20;
+        while (has_same_coordinates(draggable, i))
+        {
+            posX = Math.floor(Math.random() * 30 + 11);
+            posY = Math.floor(Math.random() * 50 + 21);
+            draggable[i].style.top = posX.toString() +  "%";
+            draggable[i].style.left = posY.toString() +  "%";
+            time_out--;
+            if (time_out <= 0)
+                break ;
+        }
+
+        drag(draggable[i]);
+    }
+
+    function has_same_coordinates(elem, n)
+    {
+        let margin = 10;
+        let left_n = elem[n].getBoundingClientRect().left;
+        let top_n = elem[n].getBoundingClientRect().top;
+        let right_n = elem[n].getBoundingClientRect().right;
+        let bottom_n = elem[n].getBoundingClientRect().bottom;
+        let left_i, top_i, right_i, bottom_i;
+        for (let i = 0; i < n; i++)
+        {
+            left_i = elem[i].getBoundingClientRect().left - margin;
+            top_i = elem[i].getBoundingClientRect().top - margin;
+            right_i = elem[i].getBoundingClientRect().right + margin;
+            bottom_i = elem[i].getBoundingClientRect().bottom + margin;
+            if ((top_n > top_i && top_n < bottom_i) || (bottom_n > top_i && bottom_n < bottom_i))
+            {
+                if ((left_n > left_i && left_n < right_i) || (right_n > left_i && right_n < right_i))
+                    return (true);
+                if (left_n < left_i && right_n > right_i)
+                    return (true);
+            }
+        }
+        return (false);
+    }
+
+    let z = 1;
+    function drag(elem)
+    {
+        elem.addEventListener('mousedown', (e) => {
+            if (elem.style.position == "relative")
+            {
+                document.getElementById("answer").removeChild(elem);
+                document.body.appendChild(elem);
+                elem.style.position = "absolute";
+                elem.style.left = e.clientX - 20 + "px";
+                elem.style.top = e.clientY - 20 + "px";
+                document.getElementById("message").textContent = "";
+            }
+            e.target.style.zIndex = z.toString();
+            z++;
+            let shiftX = e.clientX - elem.getBoundingClientRect().left;
+            let shiftY = e.clientY - elem.getBoundingClientRect().top;
+    
+            function moveAt(pageX, pageY) {
+                elem.style.left = pageX - shiftX + 'px';
+                elem.style.top = pageY - shiftY + 'px';
+            }
+    
+            function onMouseMove(event) {
+                moveAt(event.pageX, event.pageY);
+            }
+    
+            document.addEventListener('mousemove', onMouseMove);
+    
+            elem.addEventListener('mouseup', () => {
+                document.removeEventListener('mousemove', onMouseMove);
+                elem.onmouseup = null;
+
+                let left = elem.getBoundingClientRect().left;
+                let top = elem.getBoundingClientRect().top;
+                let right = elem.getBoundingClientRect().right;
+                let bottom = elem.getBoundingClientRect().bottom;
+                let answerZone = document.getElementById("answer");
+                let zoneLeft = answerZone.getBoundingClientRect().left;
+                let zoneTop = answerZone.getBoundingClientRect().top;
+                let zoneRight = answerZone.getBoundingClientRect().right;
+                let zoneBottom = answerZone.getBoundingClientRect().bottom;
+                if ((top > zoneTop && top < zoneBottom) || (bottom < zoneBottom && bottom > zoneTop))
+                {
+                    if ((left > zoneLeft && left < zoneRight) || (right < zoneRight && right > zoneLeft))
+                    {
+                        answerZone.appendChild(elem);
+                        elem.style.position = "relative";
+                        elem.style.top = "0";
+                        elem.style.left = "0";
+                        document.getElementById("message").textContent = "";
+                    }
+                }
+
+            }, { once: true });
+        });
+    
+        elem.addEventListener('dragstart', () => {
+            return false;
+        });
+    }
 
 </script>
-<script src="script.js"></script>
 </html>

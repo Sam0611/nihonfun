@@ -441,7 +441,3 @@ function generate_sentence()
     sentence += v.name;
     return (sentence);
 }
-
-let str = generate_sentence();
-document.getElementById("test").innerHTML += str + "<br>";
-document.getElementById("test").innerHTML += to_hiraganas(str) + "<br>";
