@@ -58,12 +58,14 @@
     let str = generate_sentence();
     // document.getElementById("test").innerHTML += str + "<br>";
     // document.getElementById("test").innerHTML += to_hiraganas(str) + "<br>";
+    // document.getElementById("test").innerHTML += to_kanji(str) + "<br>";
+    console.log(to_hiraganas(str));
 
     let w = str.split(" ");
     for (let i = 0; i < w.length; i++)
     {
         let elem = document.createElement("div");
-        elem.textContent = to_hiraganas(w[i]);
+        elem.textContent = to_kanji(w[i]);
         elem.classList.add("draggable");
         document.body.appendChild(elem);
     }
@@ -76,7 +78,7 @@
         {
             answerString += answer.childNodes[i].textContent;
         }
-        if (answerString == to_hiraganas(str))
+        if (answerString == to_kanji(str))
             document.getElementById("message").textContent = "correct answer";
         else
             document.getElementById("message").textContent = "wrong answer";
