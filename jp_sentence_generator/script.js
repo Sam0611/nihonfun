@@ -307,6 +307,89 @@ function is_similar(subject, object)
     return (false);
 }
 
+const conjugaison = [
+    "informal present affirmative", "informal present negative",
+    "informal past affirmative", "informal past negative",
+    "informal will affirmative", "informal will negative",
+    "formal present affirmative", "formal present negative",
+    "formal past affirmative", "formal past negative",
+    "formal will affirmative", "formal will negative"
+];
+
+const verbalForms = {
+    "formal": {
+        "present": {"affirmative": "masu", "negative": "masen"},
+        "past": {"affirmative": "mashita", "negative": "masen deshita"},
+        "will": {"affirmative": "tai desu", "negative": "takunai desu"}
+    },
+    "informal": {
+        "present": {"affirmative": "ru", "negative": "nai"},
+        "past": {"affirmative": "ta", "negative": "nakatta"},
+        "will": {"affirmative": "tai", "negative": "takunai"}
+    }
+};
+
+
+function conjuguate(verb, t)
+{
+    let tense = conjugaison[t].split(" ");
+    let conjuguatedStr = "";
+
+    // mitsukeru in past tense only
+    if (verb == "mitsukeru")
+        tense[1] = "past";
+
+    // first group verbs
+    if ((verb.endsWith("eru") || verb.endsWith("iru")) && verb != "hashiru")
+    {
+        conjuguatedStr = verbalForms[tense[0]][tense[1]][tense[2]];
+        return (conjuguatedStr);
+    }
+
+    // second group verbs
+    verb = verb.slice(0, -1);
+    if (verb.endsWith("ts"))
+        verb = verb.slice(0, -1);
+    conjuguatedStr = verb.substr(-1);
+    if (conjuguatedStr == "a")
+        conjuguatedStr = "";
+
+    // all formal forms, and informal will form
+    if (tense[0] == "formal" || tense[1] == "will")
+    {
+        if (conjuguatedStr == "s")
+            conjuguatedStr += "h";
+        if (conjuguatedStr == "t")
+            conjuguatedStr = "ch";
+        conjuguatedStr += "i" + verbalForms[tense[0]][tense[1]][tense[2]];
+    }
+
+    // informal present/past negative form
+    if (tense[2] == "negative" && tense[0] == "informal" && (tense[1] == "present" || tense[1] == "past"))
+    {
+        if (conjuguatedStr.length == 0)
+            conjuguatedStr = "w";
+        conjuguatedStr += "a" + verbalForms[tense[0]][tense[1]][tense[2]];
+    }
+
+    // informal past affirmative form
+    if (tense[0] == "informal" && tense[1] == "past" && tense[2] == "affirmative")
+    {
+        if (conjuguatedStr.length == 0 || conjuguatedStr == "t" || conjuguatedStr == "r")
+            conjuguatedStr = "tta";
+        else if (conjuguatedStr == "k")
+            conjuguatedStr = "ita";
+        else if (conjuguatedStr == "g")
+            conjuguatedStr = "ida";
+        else if (conjuguatedStr == "s")
+            conjuguatedStr = "shita";
+        else if (conjuguatedStr == "m" || conjuguatedStr == "n" || conjuguatedStr == "b")
+            conjuguatedStr = "nda";
+    }
+    
+    return (conjuguatedStr);
+}
+
 /*
 
 SUJET + WA + LIEU + DE + CO + WO + VERBE
@@ -315,20 +398,13 @@ SUJET + WA + LIEU + DE + CO + WO + VERBE
 watashi ha tomodachi to eiga wo miru : je regarde un film avec un ami
 watashi to tomodachi ha eiga wo miru : un ami et moi regardons un film
 
-- conjugaison
-mitsukeru seulement au passé
-
 - aru/iru avec ga et ni
 niwa ni neko ga iru
 kare ha neko ga iru
 watashi ha gakkou ni iru
-
-- kanji
+il y a / avoir (ga aru/iru)
 
 - verifier réponse FR
-
-il y a / avoir (ga aru/iru)
-fonction conjuguate(), get_kanji()
 
 retraduire la phrase en japonais et comparer avec la phrase générée
 vérifier les mots principaux
@@ -368,21 +444,6 @@ class Verb extends Word
             this.needCO = -1;
         else
             this.needCO = 0;
-
-        this.conjugaison = {
-            "formal": {
-                "present": {"affirmative": "masu", "negative": "masen"},
-                "past": {"affirmative": "mashita", "negative": "masen deshita"},
-                "will": {"affirmative": "tai desu", "negative": "takunai desu"},
-                "imperative": {"affirmative": "te kudasai", "negative": "naide kudasai"}
-            },
-            "informal": {
-                "present": {"affirmative": "ru", "negative": "nai"},
-                "past": {"affirmative": "ta", "negative": "nakatta"},
-                "will": {"affirmative": "tai", "negative": "takunai"},
-                "imperative": {"affirmative": "te", "negative": "naide"}
-            }
-        };
     }
 }
 

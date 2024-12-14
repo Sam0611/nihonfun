@@ -59,16 +59,25 @@
     // document.getElementById("test").innerHTML += str + "<br>";
     // document.getElementById("test").innerHTML += to_hiraganas(str) + "<br>";
     // document.getElementById("test").innerHTML += to_kanji(str) + "<br>";
-    console.log(to_hiraganas(str));
+    console.log(str);
 
     let w = str.split(" ");
+    str = "";
     for (let i = 0; i < w.length; i++)
     {
         let elem = document.createElement("div");
-        elem.textContent = to_kanji(w[i]);
+        let word = to_kanji(w[i]);
+        if (i == w.length - 1)
+        {
+            word = word.slice(0, -1);
+            word += to_hiraganas(conjuguate(w[i], Math.floor(Math.random() * conjugaison.length)));
+        }
+        elem.textContent = word;
+        str += word;
         elem.classList.add("draggable");
         document.body.appendChild(elem);
     }
+
 
     function checkAnswer()
     {
@@ -78,7 +87,7 @@
         {
             answerString += answer.childNodes[i].textContent;
         }
-        if (answerString == to_kanji(str))
+        if (answerString == str)
             document.getElementById("message").textContent = "correct answer";
         else
             document.getElementById("message").textContent = "wrong answer";
