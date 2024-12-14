@@ -347,7 +347,21 @@ function conjuguate(verb, t)
     }
 
     // second group verbs
+
+    // informal present affirmative form
+    if (conjugaison[t] == "informal present affirmative")
+    {
+        conjuguatedStr = verb.substr(-2);
+        if (verb.endsWith("tsu"))
+            conjuguatedStr = verb.substr(-3);
+        if (verb.endsWith("au"))
+            conjuguatedStr = verb.substr(-1);
+        return (conjuguatedStr);
+    }
+
+    // remove -u at the end
     verb = verb.slice(0, -1);
+
     if (verb.endsWith("ts"))
         verb = verb.slice(0, -1);
     conjuguatedStr = verb.substr(-1);
