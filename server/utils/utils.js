@@ -109,8 +109,8 @@ function send_next_question(game)
         answers = shuffleArray(answers);
     }
 
-    // if kanji test very hard, 12 answers
-    if (game.name == "kanjis" && game.level == "5")
+    // if test very hard and kanji or revert kanas, 12 answers
+    if (game.level == "5" && (game.name == "kanjis" || game.revert))
     {
         push_answers(game, answers, 11);
         answers = shuffleArray(answers);
