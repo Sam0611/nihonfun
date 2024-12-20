@@ -84,15 +84,16 @@
     }
     
 </style>
-<body class="flex flex-col min-h-screen">
 
-    <header class="text-white p-5 text-center w-full">
-        <h1 class="text-5xl font-bold">NIHONFUN</h1>
+<body class="flex flex-col min-h-screen bg-fixed" style="background-image: url('https://i.loli.net/2019/11/17/GAYyzeKsiWjP5qO.jpg'); background-size: cover;">
+
+    <header class="text-white p-5 text-center w-full transition-all duration-1000 ease-in-out transform scale-150" id="site-header">
+        <h1 class="text-5xl font-bold" id="title">NIHONFUN</h1>
     </header>
 
     <div id="gameID">ID : </div>
     
-    <div id="content" class="flex flex-col flex-grow justify-center">
+    <div id="content" class="flex flex-col flex-grow justify-center opacity-100 transition-opacity duration-1000">
     </div>
 
     <div id="playersListContainer">
@@ -100,7 +101,56 @@
         <ul id="playersList"></ul>
     </div>
     
+    <footer class="bg-black text-white p-4 opacity-0 absolute bottom-0 w-full text-center flex transition-opacity duration-1000" id="site-footer">
+        <!-- GitHub link -->
+        <div class="flex gap-6 mt-2">
+            <a href="https://github.com/S-Beaucier" target="_blank" class="flex items-center gap-2">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" class="w-8 h-8">
+                <span>Siobhan</span>
+            </a>
+            <a href="https://github.com/Sam0611" target="_blank" class="flex items-center gap-2">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" class="w-8 h-8">
+                <span>Sam</span>
+            </a>
+        </div>
+        <!-- Discord link -->
+        <div class="flex gap-6 mt-2 ml-auto">
+            <a href="https://discord.gg/NcTpW8tDWg" target="_blank" class="flex items-center gap-2">
+                <img src="https://upload.wikimedia.org/wikipedia/fr/4/4f/Discord_Logo_sans_texte.svg" class="w-8 h-8">
+                <span class="hidden sm:block">Discord</span>
+            </a>
+        </div>
+    </footer>    
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const header = document.getElementById("site-header");
+        const mainContent = document.getElementById("content");
+        const footer = document.getElementById("site-footer");
+
+        // Reduce title size after 1.5 second
+        setTimeout(() => {
+            header.classList.remove("scale-150");
+            header.classList.add("scale-100");
+        }, 1500);
+
+        // Show buttons after 2 second
+        /* setTimeout(() => {
+            mainContent.classList.remove("opacity-0");
+            mainContent.classList.add("opacity-100");
+        }, 2000); */
+
+        window.addEventListener("wheel", (event) => {
+            if (event.deltaY > 0) {
+                footer.classList.remove("opacity-0");
+                footer.classList.add("opacity-100");
+            } else if (event.deltaY < 0) {
+                footer.classList.remove("opacity-100");
+                footer.classList.add("opacity-0");
+            }
+        });
+    });
+</script>
 <script src="front/JS/data.js"></script>
 <script src="front/JS/utils.js"></script>
 <script src="client_conf.js"></script>
